@@ -41,6 +41,10 @@ class Films
         return $movie_id;
     }
 
+    public static function delete(int $id){
+        DB::qi("DELETE FROM `films` WHERE id = :id", ["id" => $id]);
+    }
+
     public static function uploadFromList(array $movies_list)
     {
         foreach ($movies_list as $movie) {
