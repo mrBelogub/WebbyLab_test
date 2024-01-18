@@ -93,7 +93,7 @@ class DB {
      * Get last incremented ID
      *
      */
-    public static function qInsertId()
+    public static function lastInsertId()
     {
         $dbConnection = self::initDB();
         return $dbConnection->lastInsertId();
