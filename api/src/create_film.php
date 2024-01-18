@@ -18,10 +18,10 @@ $stars_array = explode(",", $stars);
 
 foreach ($stars_array as $current_star_name) { 
     $trimmed_current_star_name = trim($current_star_name); 
-    $actor_id = Stars::getIdByName($trimmed_current_star_name);
-    if(!$actor_id) {
-        $actor_id = Stars::create($current_star_name);
+    $star_id = Stars::getIdByName($trimmed_current_star_name);
+    if(!$star_id) {
+        $star_id = Stars::create($current_star_name);
     }
 
-    Stars::addToFilm($actor_id, $movie_id);
+    Stars::addToFilm($star_id, $movie_id);
 }

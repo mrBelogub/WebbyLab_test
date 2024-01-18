@@ -1,12 +1,12 @@
 var sort_type = "";
 var title = "";
-var actor_name = "";
+var star_name = "";
 
 get_films();
 
-function get_films(sort_type, title, actor_name) {
+function get_films(sort_type, title, star_name) {
 
-    $.get("api/get_films", { "sort_type": sort_type, "title": title, "actor_name": actor_name }, function (data) {
+    $.get("api/get_films", { "sort_type": sort_type, "title": title, "star_name": star_name }, function (data) {
 
         var json_data = jQuery.parseJSON(data);
 
@@ -18,7 +18,7 @@ function get_films(sort_type, title, actor_name) {
             var title = value["title"];
             var release_year = value["release_year"];
             var format = value["format"];
-            var actors = value["actors"];
+            var stars = value["stars"];
 
             films_cards += `<div class="col-md-2 card-main-div">
                             <div class="card custom-card">
@@ -28,7 +28,7 @@ function get_films(sort_type, title, actor_name) {
                                     <h7><b>Title:</b> `+ title + `</h7><br>
                                     <h7><b>Release year:</b> `+ release_year + `</h7><br>
                                     <h7><b>Format:</b> `+ format + `</h7><br>
-                                    <h7><b>Stars:</b> `+ actors + `</h7>
+                                    <h7><b>Stars:</b> `+ stars + `</h7>
                                 </div>
                             </div>
                         </div>`;
@@ -49,7 +49,7 @@ $("#sorting-checkbox-div").click(function () {
         sort_type = "";
     }
 
-    get_films(sort_type, title, actor_name);
+    get_films(sort_type, title, star_name);
 
     $("#sorting-checkbox").prop("checked", !current_state);
 });
@@ -59,15 +59,15 @@ function find_by_movie_title(inputElement) {
 
     title = inputValue;
 
-    get_films(sort_type, title, actor_name);
+    get_films(sort_type, title, star_name);
 }
 
 function find_by_star_name(inputElement) {
     var inputValue = inputElement.value;
 
-    actor_name = inputValue;
+    star_name = inputValue;
 
-    get_films(sort_type, title, actor_name);
+    get_films(sort_type, title, star_name);
 }
 
 function logout() {
@@ -80,7 +80,7 @@ function confirm_delete(id, movie_title) {
 
     if (result) {
         $.get("api/delete_film", { "id": id });
-        get_films(sort_type, title, actor_name);
+        get_films(sort_type, title, star_name);
     }
 }
 
@@ -110,7 +110,7 @@ function create_new_movie() {
 
     $.post("api/create_film", { "title": new_movie_title, "release_year": new_movie_release_year, "format": new_movie_format, "stars": new_movie_stars }, function () {
         alert("Фільм успішно додано!");
-        get_films(sort_type, title, actor_name);
+        get_films(sort_type, title, star_name);
         $('#exampleModal').modal('hide');
     });
 }
@@ -127,12 +127,12 @@ function create_movies_from_file() {
         processData: false,
         success: function (response) {
             alert("Фільми успішно додано!");
-            get_films(sort_type, title, actor_name);
+            get_films(sort_type, title, star_name);
             $('#exampleModal').modal('hide');
         },
         error: function (error) {
             alert("При завантаженні виникла помилка! " + error);
-            get_films(sort_type, title, actor_name);
+            get_films(sort_type, title, star_name);
             $('#exampleModal').modal('hide');
         }
     });

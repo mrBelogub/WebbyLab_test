@@ -4,15 +4,15 @@ $sort_type = $_GET['sort_type'] ?? null;
 
 $title = $_GET['title'] ?? null;
 
-$actor_name = $_GET['actor_name'] ?? null;
+$star_name = $_GET['star_name'] ?? null;
 
 switch ($sort_type) {
     case SORT_TYPE_APLHABETICAL:
-        $films_list = Films::getByAlphabeticalTitle($title, $actor_name);
+        $films_list = Films::getByAlphabeticalTitle($title, $star_name);
         break;
     
     default:
-        $films_list = Films::getWithoutSorting($title, $actor_name);
+        $films_list = Films::getWithoutSorting($title, $star_name);
         break;
 }
 
