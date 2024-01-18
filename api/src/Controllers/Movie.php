@@ -41,7 +41,8 @@ class Movie
         return $movie_id;
     }
 
-    public static function delete(int $id){
+    public static function delete(int $id)
+    {
         DB::qi("DELETE FROM `movies` WHERE id = :id", ["id" => $id]);
     }
 
@@ -81,8 +82,8 @@ class Movie
                 $movie_id = self::create($title, $release_year, $format);
             }
 
-            foreach ($stars as $current_star_name) {  
-                $trimmed_current_star_name = trim($current_star_name); 
+            foreach ($stars as $current_star_name) {
+                $trimmed_current_star_name = trim($current_star_name);
                 $star_id = Star::getIdByName($trimmed_current_star_name);
                 if(!$star_id) {
                     $star_id = Star::create($current_star_name);

@@ -16,8 +16,8 @@ $movie_id = Movie::create($title, $release_year, $format);
 
 $stars_array = explode(",", $stars);
 
-foreach ($stars_array as $current_star_name) { 
-    $trimmed_current_star_name = trim($current_star_name); 
+foreach ($stars_array as $current_star_name) {
+    $trimmed_current_star_name = trim($current_star_name);
     $star_id = Star::getIdByName($trimmed_current_star_name);
     if(!$star_id) {
         $star_id = Star::create($current_star_name);

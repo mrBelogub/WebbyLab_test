@@ -1,6 +1,5 @@
 <?php
 
-require_once 'constants.php';
 require_once 'sql_shortcuts.php';
 require_once 'validator.php';
 

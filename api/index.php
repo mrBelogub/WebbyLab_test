@@ -1,15 +1,16 @@
 <?php
+
 session_start();
 
 $action = $_GET['action'] ?? null;
 
-if(empty($action)){
+if(empty($action)) {
     echo 'Unknown action';
     http_response_code(400);
     exit;
 }
 
-if ($action != "login"){
+if ($action != "login") {
     if (!isset($_SESSION['user'])) {
         echo "401 Unauthorized";
         http_response_code(401);
@@ -27,10 +28,9 @@ if (!file_exists($file_path)) {
 
 require_once "src/Core/requires.php";
 
-try{
+try {
     require_once $file_path;
-}
-catch (Exception $e){
+} catch (Exception $e) {
     // Отримання значення message
     $errorMessage = $e->getMessage();
 
@@ -41,5 +41,3 @@ catch (Exception $e){
     http_response_code(400);
     exit;
 }
-
-
