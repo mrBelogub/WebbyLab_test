@@ -1,11 +1,20 @@
 <?php
+session_start();
 
 $action = $_GET['action'] ?? null;
 
 if(empty($action)){
-    echo 'unknown action';
+    echo 'Unknown action';
     http_response_code(400);
     exit;
+}
+
+if ($action != "login"){
+    if (!isset($_SESSION['user'])) {
+        echo "401 Unauthorized";
+        http_response_code(401);
+        exit;
+    }
 }
 
 $file_path = "src/" . $action . ".php";

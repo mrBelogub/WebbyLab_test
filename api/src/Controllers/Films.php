@@ -71,7 +71,7 @@ class Films
                         return explode(', ', $value);
                     }
 
-                    return trim(explode(": ", $line)[1]);
+                    return trim(explode(": ", $line, 2)[1]);
                 },
                 $lines
             );
@@ -82,7 +82,8 @@ class Films
             }
 
             foreach ($stars as $current_star_name) {  
-                $actor_id = Stars::getIdByName($current_star_name);
+                $trimmed_current_star_name = trim($current_star_name); 
+                $actor_id = Stars::getIdByName($trimmed_current_star_name);
                 if(!$actor_id) {
                     $actor_id = Stars::create($current_star_name);
 
