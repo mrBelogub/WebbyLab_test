@@ -1,48 +1,48 @@
 <?php
 
-class Films
+class Movie
 {
     public static function getWithoutSorting($title = null, $star_name = null)
     {
-        $films_list = DB::q("SELECT `films`.*, GROUP_CONCAT(`stars`.`name` SEPARATOR ', ') AS `stars`
-                            FROM `films`
-                            LEFT JOIN `stars_in_films` ON `films`.`id` = `stars_in_films`.`film_id`
-                            LEFT JOIN `stars` ON `stars`.`id` = `stars_in_films`.`star_id`
-                            WHERE `films`.`title` LIKE COALESCE(CONCAT('%', :title, '%'), `films`.`title`)
+        $movies_list = DB::q("SELECT `movies`.*, GROUP_CONCAT(`stars`.`name` SEPARATOR ', ') AS `stars`
+                            FROM `movies`
+                            LEFT JOIN `stars_in_movies` ON `movies`.`id` = `stars_in_movies`.`movie_id`
+                            LEFT JOIN `stars` ON `stars`.`id` = `stars_in_movies`.`star_id`
+                            WHERE `movies`.`title` LIKE COALESCE(CONCAT('%', :title, '%'), `movies`.`title`)
                             AND `stars`.`name` LIKE COALESCE(CONCAT('%', :star_name, '%'), `stars`.`name`)
-                            GROUP BY `films`.`id`", ["title" => $title, "star_name" => $star_name]);
-        return $films_list;
+                            GROUP BY `movies`.`id`", ["title" => $title, "star_name" => $star_name]);
+        return $movies_list;
     }
 
     public static function getByAlphabeticalTitle($title = null, $star_name = null)
     {
-        $films_list = DB::q("SELECT `films`.*, GROUP_CONCAT(`stars`.`name` SEPARATOR ', ') AS `stars`
-                            FROM `films`
-                            LEFT JOIN `stars_in_films` ON `films`.`id` = `stars_in_films`.`film_id`
-                            LEFT JOIN `stars` ON `stars`.`id` = `stars_in_films`.`star_id`
-                            WHERE `films`.`title` LIKE COALESCE(CONCAT('%', :title, '%'), `films`.`title`) 
+        $movies_list = DB::q("SELECT `movies`.*, GROUP_CONCAT(`stars`.`name` SEPARATOR ', ') AS `stars`
+                            FROM `movies`
+                            LEFT JOIN `stars_in_movies` ON `movies`.`id` = `stars_in_movies`.`movie_id`
+                            LEFT JOIN `stars` ON `stars`.`id` = `stars_in_movies`.`star_id`
+                            WHERE `movies`.`title` LIKE COALESCE(CONCAT('%', :title, '%'), `movies`.`title`) 
                             AND `stars`.`name` LIKE COALESCE(CONCAT('%', :star_name, '%'), `stars`.`name`)
-                            GROUP BY `films`.`id`
-                            ORDER BY `films`.`title` ASC", ["title" => $title, "star_name" => $star_name]);
+                            GROUP BY `movies`.`id`
+                            ORDER BY `movies`.`title` ASC", ["title" => $title, "star_name" => $star_name]);
 
-        return $films_list;
+        return $movies_list;
     }
 
     public static function getIdByData(string $title, int $release_year, string $format)
     {
-        $film_data = DB::q1("SELECT `id` FROM `films` WHERE `title` = :title AND `release_year` = :release_year AND `format` = :format", ["title" => $title, "release_year" => $release_year, "format" => $format]);
-        $film_id = $film_data["id"] ?? null;
-        return $film_id;
+        $movie_data = DB::q1("SELECT `id` FROM `movies` WHERE `title` = :title AND `release_year` = :release_year AND `format` = :format", ["title" => $title, "release_year" => $release_year, "format" => $format]);
+        $movie_id = $movie_data["id"] ?? null;
+        return $movie_id;
     }
 
     public static function create(string $title, int $release_year, string $format)
     {
-        $movie_id = DB::qi("INSERT INTO `films` (`title`, `release_year`, `format`) VALUES (:title, :release_year, :format)", ["title" => $title, "release_year" => $release_year, "format" => $format]);
+        $movie_id = DB::qi("INSERT INTO `movies` (`title`, `release_year`, `format`) VALUES (:title, :release_year, :format)", ["title" => $title, "release_year" => $release_year, "format" => $format]);
         return $movie_id;
     }
 
     public static function delete(int $id){
-        DB::qi("DELETE FROM `films` WHERE id = :id", ["id" => $id]);
+        DB::qi("DELETE FROM `movies` WHERE id = :id", ["id" => $id]);
     }
 
     public static function uploadFromList(array $movies_list)
@@ -83,13 +83,13 @@ class Films
 
             foreach ($stars as $current_star_name) {  
                 $trimmed_current_star_name = trim($current_star_name); 
-                $star_id = Stars::getIdByName($trimmed_current_star_name);
+                $star_id = Star::getIdByName($trimmed_current_star_name);
                 if(!$star_id) {
-                    $star_id = Stars::create($current_star_name);
+                    $star_id = Star::create($current_star_name);
 
                 }
 
-                Stars::addToFilm($star_id, $movie_id);
+                Star::addToMovie($star_id, $movie_id);
             }
 
         }

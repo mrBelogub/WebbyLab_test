@@ -8,8 +8,8 @@ $uploadedFile = $_FILES["file"];
 
 $fileTmpName = $uploadedFile["tmp_name"];
 
-$films_list = file_get_contents($fileTmpName);
+$movies_list = file_get_contents($fileTmpName);
 
-$movies = explode("\n\n", $films_list);
+$movies = explode("\n\n", $movies_list);
 
-Films::uploadFromList($movies);
+Movie::uploadFromList($movies);

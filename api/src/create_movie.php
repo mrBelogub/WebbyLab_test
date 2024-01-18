@@ -12,16 +12,16 @@ Validator::isEmpty("Зірки", $stars);
 
 Validator::isMovieFormatAcceptable($format);
 
-$movie_id = Films::create($title, $release_year, $format);
+$movie_id = Movie::create($title, $release_year, $format);
 
 $stars_array = explode(",", $stars);
 
 foreach ($stars_array as $current_star_name) { 
     $trimmed_current_star_name = trim($current_star_name); 
-    $star_id = Stars::getIdByName($trimmed_current_star_name);
+    $star_id = Star::getIdByName($trimmed_current_star_name);
     if(!$star_id) {
-        $star_id = Stars::create($current_star_name);
+        $star_id = Star::create($current_star_name);
     }
 
-    Stars::addToFilm($star_id, $movie_id);
+    Star::addToMovie($star_id, $movie_id);
 }
