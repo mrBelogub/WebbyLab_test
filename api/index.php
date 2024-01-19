@@ -13,8 +13,8 @@ if(empty($action)) {
     exit;
 }
 
-// Якщо користувач хотів не авторизуватись - перевіряємо, чи авторизованний він
-if ($action != "login") {
+// Якщо користувач хотів не авторизуватись або вийти - перевіряємо, чи авторизованний він
+if ($action != "login" && $action != "logout") {
     if (!isset($_SESSION['user'])) {
         echo "401 Unauthorized";
         http_response_code(401);

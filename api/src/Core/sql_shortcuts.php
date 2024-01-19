@@ -10,7 +10,6 @@ class DB
         $dbConnection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
         $dbConnection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $dbConnection->exec("set names utf8");
-        // TODO: вывести ошибку подключения
         return $dbConnection;
     }
 

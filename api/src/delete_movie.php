@@ -1,7 +1,7 @@
 <?php
 
 // Отримуємо ID із запиту
-$id = $_GET["id"] ?? null;
+$id = $_POST["id"] ?? null;
 
 // Перевяємо чи не пустий ID прийшов
 Validator::isEmpty("ID фільму", $id);

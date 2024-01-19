@@ -30,7 +30,7 @@ foreach ($stars_array as $current_star_name) {
     $star_id = Star::getIdByName($trimmed_current_star_name);
     if(!$star_id) {
         // Якщо нема - створюємо зірку та отримуємо ID
-        $star_id = Star::create($current_star_name);
+        $star_id = Star::create($trimmed_current_star_name);
     }
 
     // Прив'язуємо зірку до фільму
