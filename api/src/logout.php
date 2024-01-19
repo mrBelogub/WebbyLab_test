@@ -1,6 +1,4 @@
 <?php
 
+// Деавторизуємо користувача
 User::Logout();
-
-header("Location: ../login.php");
-exit();

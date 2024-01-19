@@ -41,10 +41,10 @@ class DB
     //////////////
 
     /**
-     * Default request to DB
+     * Будь який запит в БД
      *
-     * @param string $sql
-     * @param array $params
+     * @param string $sql - Запит
+     * @param array $params - Масив параметрів
      */
     public static function q(string $sql, array $params)
     {
@@ -57,10 +57,10 @@ class DB
     }
 
     /**
-     * Get one row
+     * Отримати одну строку
      *
-     * @param string $sql
-     * @param array $params
+     * @param string $sql - Запит
+     * @param array $params - Масив параметрів
      */
     public static function q1(string $sql, array $params)
     {
@@ -73,10 +73,10 @@ class DB
     }
 
     /**
-     * Insert row
+     * Вставити строку
      *
-     * @param string $sql
-     * @param array $params
+     * @param string $sql - Запит
+     * @param array $params - Масив параметрів
      */
     public static function qi(string $sql, array $params)
     {
@@ -91,29 +91,12 @@ class DB
     }
 
     /**
-     * Get last incremented ID
+     * Отримати ID останньої створенної строки
      *
      */
     public static function lastInsertId()
     {
         $dbConnection = self::initDB();
         return $dbConnection->lastInsertId();
-    }
-
-    /**
-     * Get count of changed row
-     *
-     * @return void
-     */
-    public static function qChangedCount() // количество измененных записей
-    {
-        $sql = "SELECT ROW_COUNT() row_count;";
-        $params = [];
-        $dbConnection = self::initDB();
-        list($sql, $params) = self::parseBoundArrays($sql, $params);
-        $stmt = $dbConnection->prepare($sql);
-        $stmt->execute($params);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result['row_count'] ?? null;
     }
 }

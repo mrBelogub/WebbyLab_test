@@ -2,9 +2,16 @@
 
 class Validator
 {
-    private const ACCEPTABLE_MOVIES_FORMATS = ["VHS", "DVD", "Blu-Ray"];
+    private const ACCEPTABLE_MOVIES_FORMATS = ["VHS", "DVD", "Blu-Ray"]; // Список допустимих форматів фільмів
 
-    public static function isEmpty($name, $var)
+    /**
+     * Перевірка чи пуста змінна
+     *
+     * @param string $name Назва
+     * @param mixed $var Змінна
+     * @return boolean Чи пуста змінна
+     */
+    public static function isEmpty(string $name, $var)
     {
         if(empty($var)) {
             throw new Exception($name . " is empty!");
@@ -12,7 +19,7 @@ class Validator
     }
 
     /**
-     * Перевіряє, чи підходить формат фільму до допустимих
+     * Перевірка, чи підходить формат фільму до допустимих
      *
      * @param string $format - Формат фільму
      */
