@@ -6,7 +6,7 @@ get_movies();
 
 function get_movies(sort_type, title, star_name) {
 
-    $.get("api/get_movies", { "sort_type": sort_type, "title": title, "star_name": star_name }, function (data) {
+    $.get("api/index.php?action=get_movies", { "sort_type": sort_type, "title": title, "star_name": star_name }, function (data) {
 
         var json_data = jQuery.parseJSON(data);
 
@@ -71,7 +71,7 @@ function find_by_star_name(inputElement) {
 }
 
 function logout() {
-    $.get("api/logout");
+    $.get("api/index.php?action=logout");
     window.location.href = "index.php";
 }
 
@@ -79,7 +79,7 @@ function confirm_delete(id, movie_title) {
     var result = confirm('Ви впененні у видаленні фільму "' + movie_title + '" ?');
 
     if (result) {
-        $.get("api/delete_movie", { "id": id });
+        $.get("api/index.php?action=delete_movie", { "id": id });
         get_movies(sort_type, title, star_name);
     }
 }
@@ -120,7 +120,7 @@ function create_movies_from_file() {
     formData.append('file', $('#new_movies_from_file')[0].files[0]);
 
     $.ajax({
-        url: 'api/upload_movies_list',
+        url: 'api/index.php?action=upload_movies_list',
         type: 'POST',
         data: formData,
         contentType: false,

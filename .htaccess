@@ -1,5 +1,0 @@
-RewriteEngine On
-
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^api/(.*)$ api/index.php?action=$1 [L,QSA]

@@ -32,7 +32,7 @@ if (isset($_SESSION['user'])) {
             <div class="text-center mt-4 login-error">
                 Користувача з таким іменем та паролем не знайдено!
             </div>
-            <form class="p-3 mt-3" action="api/login" method="post">
+            <form class="p-3 mt-3" action="api/index.php?action=login" method="post">
                 <div class="form-field d-flex align-items-center">
                     <span class="far fa-user"></span>
                     <input type="text" name="email" placeholder="E-mail">

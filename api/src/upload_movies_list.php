@@ -13,4 +13,4 @@ $fileTmpName = $uploadedFile["tmp_name"];
 $movies_list = file_get_contents($fileTmpName);
 
 // Парсимо та додаємо фільми та зірок в БД
-Movie::uploadFromList($movies);
+Movie::uploadFromList($movies_list);

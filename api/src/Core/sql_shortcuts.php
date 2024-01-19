@@ -6,7 +6,7 @@ class DB
 {
     private static function initDB()
     {
-        $dbConnection = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . "; charset=utf8", DB_USER, DB_PASS);
+        $dbConnection = new PDO("mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME . "; charset=utf8", DB_USER, DB_PASS);
         $dbConnection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
         $dbConnection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $dbConnection->exec("set names utf8");
