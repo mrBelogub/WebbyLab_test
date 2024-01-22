@@ -108,11 +108,25 @@ function create_new_movie() {
     var new_movie_format = $("#new_movie_format").val();
     var new_movie_stars = $("#new_movie_stars").val();
 
-    $.post("api/index.php?action=create_movie", { "title": new_movie_title, "release_year": new_movie_release_year, "format": new_movie_format, "stars": new_movie_stars }, function () {
-        alert("Фільм успішно додано!");
-        get_movies(sort_type, title, star_name);
-        $('#exampleModal').modal('hide');
+    $.ajax({
+        type: "POST",
+        url: "api/index.php?action=create_movie",
+        data: {
+            "title": new_movie_title,
+            "release_year": new_movie_release_year,
+            "format": new_movie_format,
+            "stars": new_movie_stars
+        },
+        success: function () {
+            alert("Фільм успішно додано!");
+            get_movies(sort_type, title, star_name);
+            $('#exampleModal').modal('hide');
+        },
+        error: function (jqXHR) {
+            alert(jqXHR.responseText);
+        }
     });
+
 }
 
 function create_movies_from_file() {
@@ -130,10 +144,9 @@ function create_movies_from_file() {
             get_movies(sort_type, title, star_name);
             $('#exampleModal').modal('hide');
         },
-        error: function (error) {
-            alert("При завантаженні виникла помилка! " + error);
+        error: function (jqXHR) {
+            alert(jqXHR.responseText);
             get_movies(sort_type, title, star_name);
-            $('#exampleModal').modal('hide');
         }
     });
 }
