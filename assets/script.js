@@ -79,7 +79,7 @@ function confirm_delete(id, movie_title) {
     var result = confirm('Ви впененні у видаленні фільму "' + movie_title + '" ?');
 
     if (result) {
-        $.get("api/index.php?action=delete_movie", { "id": id });
+        $.post("api/index.php?action=delete_movie", { "id": id });
         get_movies(sort_type, title, star_name);
     }
 }
