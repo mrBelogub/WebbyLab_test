@@ -52,4 +52,19 @@ class Validator
             throw new Exception("У фільму ".$title." дата виходу (".$release_year.") не входить в допустимий діапазон!");
         }
     }
+
+    /**
+     * Перевірка чи є фільм з такою назвою
+     *
+     * @param string $title Назва фільму
+     * @throws Exception Помилка у разі якщо фільм з такою назвою вже є
+     */
+    public static function isMovieExist(string $title)
+    {
+        $movie_data = DB::q1("SELECT `id` FROM `movies` WHERE `title` = :title", ["title" => $title]);
+        if(!empty($movie_data)){
+            throw new Exception("Фільм ".$title." вже є в базі!");
+        }
+
+    }
 }

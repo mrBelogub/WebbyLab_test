@@ -12,6 +12,9 @@ Validator::isEmpty("Рік випуску", $release_year);
 Validator::isEmpty("Формат", $title);
 Validator::isEmpty("Зірки", $stars);
 
+// Перевіряємо, чи існує фільм
+Validator::isMovieExist($title);
+
 // Перевіємо чи підходить формат фільму
 Validator::isMovieFormatAcceptable($format, $title);
 

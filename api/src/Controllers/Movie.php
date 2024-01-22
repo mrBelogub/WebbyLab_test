@@ -43,21 +43,6 @@ class Movie
     }
 
     /**
-     * Отримати ID конкретного фільму
-     *
-     * @param string $title Назва фільму
-     * @param integer $release_year Рік випуску
-     * @param string $format Формат
-     * @return integer|null ID фільму якщо знайшов
-     */
-    public static function getIdByData(string $title, int $release_year, string $format): ?int
-    {
-        $movie_data = DB::q1("SELECT `id` FROM `movies` WHERE `title` = :title AND `release_year` = :release_year AND `format` = :format", ["title" => $title, "release_year" => $release_year, "format" => $format]);
-        $movie_id = $movie_data["id"] ?? null;
-        return $movie_id;
-    }
-
-    /**
      * Створити фільм
      *
      * @param string $title Назва фільму
@@ -124,19 +109,18 @@ class Movie
                 $lines
             );
 
+            // Перевіряємо, чи існує фільм
+            Validator::isMovieExist($title);
+
             // Перевіряємо, чи підходить формат фільму до допустимих
             Validator::isMovieFormatAcceptable($format, $title);
             
             // Перевіряємо, чи входить рік виходу в допустимий діапазон
             Validator::isMovieReleaseYearInAcceptableRange($release_year, $title);
 
-            // Перевіряємо, чи існує фільм та отримуємо його ID
-            $movie_id = self::getIdByData($title, $release_year, $format);
-            if(!$movie_id) {
-                // Якщо фільму ще не існує в БД - створюємо та отримуємо його ID
-                $movie_id = self::create($title, $release_year, $format);
-            }
-
+            // Cтворюємо фільм та отримуємо його ID
+            $movie_id = self::create($title, $release_year, $format);
+            
             // Кожну зірку перевіряємо на наявніть в бд (якщо нема - ствостворюємо) та присвоюємо до фільму
             foreach ($stars as $current_star_name) {
                 // Перевіряємо, чи існує зірка в бд та отримуємо її ID
