@@ -2,15 +2,19 @@
 
 class Movie
 {
+    public const SORT_TYPE_ALPHABETICAL = "alphabetical";
+
     /**
-     * Отримати всі фільми без сортування
+     * Отримати всі фільми
      *
+     * @param string $sort_type Тип сортування
      * @param string $title Назва фільму
      * @param string $star_name - Ім'я зірки
      * @return array Масив фільмів
      */
-    public static function getWithoutSorting(string $title = null, string $star_name = null): array
+    public static function getAll(string $sort_type = null, string $title = null, string $star_name = null): array
     {
+
         $movies_list = DB::q("SELECT `movies`.*, GROUP_CONCAT(`stars`.`name` SEPARATOR ', ') AS `stars`
                             FROM `movies`
                             LEFT JOIN `stars_in_movies` ON `movies`.`id` = `stars_in_movies`.`movie_id`
@@ -18,27 +22,13 @@ class Movie
                             WHERE `movies`.`title` LIKE COALESCE(CONCAT('%', :title, '%'), `movies`.`title`)
                             AND `stars`.`name` LIKE COALESCE(CONCAT('%', :star_name, '%'), `stars`.`name`)
                             GROUP BY `movies`.`id`", ["title" => $title, "star_name" => $star_name]);
-        return $movies_list;
-    }
 
-    /**
-     * Отримати всі фільми з сортуванням в алфавітному порядку по назві
-     *
-     * @param string $title Назва фільму
-     * @param string $star_name - Ім'я зірки
-     * @return array Масив фільмів
-     */
-    public static function getByAlphabeticalTitle(string $title = null, string $star_name = null): array
-    {
-        $movies_list = DB::q("SELECT `movies`.*, GROUP_CONCAT(`stars`.`name` SEPARATOR ', ') AS `stars`
-                            FROM `movies`
-                            LEFT JOIN `stars_in_movies` ON `movies`.`id` = `stars_in_movies`.`movie_id`
-                            LEFT JOIN `stars` ON `stars`.`id` = `stars_in_movies`.`star_id`
-                            WHERE `movies`.`title` LIKE COALESCE(CONCAT('%', :title, '%'), `movies`.`title`) 
-                            AND `stars`.`name` LIKE COALESCE(CONCAT('%', :star_name, '%'), `stars`.`name`)
-                            GROUP BY `movies`.`id`
-                            ORDER BY `movies`.`title` ASC", ["title" => $title, "star_name" => $star_name]);
+        // Якщо вибрано сортировка по алфавіту
+        if($sort_type == self::SORT_TYPE_ALPHABETICAL) {
+            $movies_list = self::sortByAlphabetic($movies_list);
+        }
 
+        // Повертаємо список фільмів
         return $movies_list;
     }
 
@@ -114,13 +104,13 @@ class Movie
 
             // Перевіряємо, чи підходить формат фільму до допустимих
             Validator::isMovieFormatAcceptable($format, $title);
-            
+
             // Перевіряємо, чи входить рік виходу в допустимий діапазон
             Validator::isMovieReleaseYearInAcceptableRange($release_year, $title);
 
             // Cтворюємо фільм та отримуємо його ID
             $movie_id = self::create($title, $release_year, $format);
-            
+
             // Кожну зірку перевіряємо на наявніть в бд (якщо нема - ствостворюємо) та присвоюємо до фільму
             foreach ($stars as $current_star_name) {
                 // Видаляємо зайві пробіли в імені
@@ -140,5 +130,51 @@ class Movie
                 Star::addToMovie($star_id, $movie_id);
             }
         }
+    }
+
+    /**
+     * Сортування масиву по алфавіту
+     *
+     * @param array $movies_list список фільмів
+     * @return array Відсортований список фільмів
+     */
+    private static function sortByAlphabetic(array $movies_list): array
+    {
+        // Сортируємо масив по алфавіту
+        usort($movies_list, function ($a, $b) {
+            return strcmp(strtolower($a['title']), strtolower($b['title']));
+        });
+
+        // Проходимо по кожному елементу масиву
+        for ($i = 0; $i < count($movies_list) - 1; $i++) {
+
+            // Отримуємо першу літеру поточного та наступного слова
+            $current_first_letter = mb_substr($movies_list[$i]['title'], 0, 1, 'UTF-8');
+            $next_first_letter = mb_substr($movies_list[$i + 1]['title'], 0, 1, 'UTF-8');
+
+            // Дізнаємося чи співпадають перша літера поточного та наступного слова
+            $current_letter_equal_next = strtolower($current_first_letter) == strtolower($next_first_letter);
+
+            // Якщо не співпадають - пропускаємо цю ітерацію циклу
+            if(!$current_letter_equal_next) {
+                continue;
+            }
+
+            // Дізнаємося чи велика перша літера поточного та наступного слова
+            $current_is_upper = ctype_upper($current_first_letter);
+            $next_is_upper = ctype_upper($next_first_letter);
+
+            // Якщо перша літера поточного не маленька або перша літера наступного слова не велика - пропускаємо цю ітерацію циклу
+            if($current_is_upper || !$next_is_upper) {
+                continue;
+            }
+
+            // Міняємо місцями поточний та наступний елемент масиву
+            $temp = $movies_list[$i];
+            $movies_list[$i] = $movies_list[$i + 1];
+            $movies_list[$i + 1] = $temp;
+        }
+
+        return $movies_list;
     }
 }
