@@ -113,11 +113,6 @@ class Movie
                     // Перевіряємо чи не пусті ці дані
                     Validator::isEmpty($key, $value);
 
-                    // Якщо це формат - перевіряємо чи допустимий він
-                    if ($key === "Format") {
-                        Validator::isMovieFormatAcceptable($value);
-                    }
-
                     // Якщо це зірки - розбиваємо на кожну окрему та додаємо в змінну
                     if ($key === 'Stars') {
                         return explode(', ', $value);
@@ -128,6 +123,12 @@ class Movie
                 },
                 $lines
             );
+
+            // Перевіряємо, чи підходить формат фільму до допустимих
+            Validator::isMovieFormatAcceptable($format, $title);
+            
+            // Перевіряємо, чи входить рік виходу в допустимий діапазон
+            Validator::isMovieReleaseYearInAcceptableRange($release_year, $title);
 
             // Перевіряємо, чи існує фільм та отримуємо його ID
             $movie_id = self::getIdByData($title, $release_year, $format);

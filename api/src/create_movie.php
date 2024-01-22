@@ -13,7 +13,10 @@ Validator::isEmpty("Формат", $title);
 Validator::isEmpty("Зірки", $stars);
 
 // Перевіємо чи підходить формат фільму
-Validator::isMovieFormatAcceptable($format);
+Validator::isMovieFormatAcceptable($format, $title);
+
+// Перевіряємо, чи входить рік виходу в допустимий діапазон
+Validator::isMovieReleaseYearInAcceptableRange($release_year, $title);
 
 // Створюємо фільм та отримуємо його ID
 $movie_id = Movie::create($title, $release_year, $format);
