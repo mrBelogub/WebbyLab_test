@@ -4,6 +4,7 @@ class Validator
 {
     private const ACCEPTABLE_MOVIES_FORMATS = ["VHS", "DVD", "Blu-Ray"]; // Список допустимих форматів фільмів
     private const MIN_RELEASE_YEAR = 1900; // Мінімально допустимий рік
+    private const STAR_NAME_ACCEPTABLE_SYMBOLS = '/^[a-zA-Zа-яА-ЯёЁґҐєЄіІїЇ, -]+$/u';
 
     /**
      * Перевірка чи пуста змінна
@@ -66,5 +67,17 @@ class Validator
             throw new Exception("Фільм ".$title." вже є в базі!");
         }
 
+    }
+
+    /**
+     * Перевірка чи є в імені зірки неприпустимі символи
+     *
+     * @param string $name Ім'я зірки
+     * @throws Exception Помилка у разі якщо в імені зірки є неприпустимі символи
+     */
+    public static function checkStarName(string $name){
+        if (!preg_match(self::STAR_NAME_ACCEPTABLE_SYMBOLS, $name)) {
+            throw new Exception("В імені зірки ".$name." є неприпустимі символи!");
+        }
     }
 }

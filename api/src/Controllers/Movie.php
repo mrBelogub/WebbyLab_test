@@ -123,11 +123,17 @@ class Movie
             
             // Кожну зірку перевіряємо на наявніть в бд (якщо нема - ствостворюємо) та присвоюємо до фільму
             foreach ($stars as $current_star_name) {
+                // Видаляємо зайві пробіли в імені
+                $trimmed_current_star_name = trim($current_star_name);
+
+                // Перевіяємо чи нема в імені зірки неприпустимих символів
+                Validator::checkStarName($trimmed_current_star_name);
+
                 // Перевіряємо, чи існує зірка в бд та отримуємо її ID
-                $star_id = Star::getIdByName($current_star_name);
+                $star_id = Star::getIdByName($trimmed_current_star_name);
                 if(!$star_id) {
                     // Якщо зірки не існує - створюємо та отримуємо її ID
-                    $star_id = Star::create($current_star_name);
+                    $star_id = Star::create($trimmed_current_star_name);
                 }
 
                 // Привязуємо зірку до фільму

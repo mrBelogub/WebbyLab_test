@@ -32,6 +32,9 @@ foreach ($stars_array as $current_star_name) {
     // Видаляємо зайві пробіли в імені
     $trimmed_current_star_name = trim($current_star_name);
 
+    // Перевіяємо чи нема в імені зірки неприпустимих символів
+    Validator::checkStarName($trimmed_current_star_name);
+
     // Перевіяємо чи нема зірки з цим іменем в бд
     $star_id = Star::getIdByName($trimmed_current_star_name);
     if(!$star_id) {
