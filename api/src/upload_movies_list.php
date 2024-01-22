@@ -10,6 +10,10 @@ $file_name = $_FILES["file"]["name"];
 $allowed_extensions = ["txt"];
 Validator::checkFileExtension($file_name, $allowed_extensions);
 
+// Перевіряємо, чи не порожній файл
+$file_size = $_FILES["file"]["size"];
+Validator::checkFileIsntEmpty($file_size);
+
 // "Відкриваємо" файл
 $uploadedFile = $_FILES["file"];
 $fileTmpName = $uploadedFile["tmp_name"];

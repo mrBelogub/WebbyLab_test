@@ -99,4 +99,17 @@ class Validator
             throw new Exception("Недопустимий формат файлу.");
         }
     }
+
+    /**
+     * Перевірка чи не порожній файл
+     *
+     * @param integer $file_size розмір файлу
+     * @throws Exception Помилка у разі якщо файл порожній
+     */
+    public static function checkFileIsntEmpty(int $file_size)
+    {
+        if ($file_size === 0) {
+            throw new Exception("Завантажений файл порожній.");
+        }
+    }
 }
