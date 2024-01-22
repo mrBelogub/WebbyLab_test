@@ -11,11 +11,12 @@ class Validator
      *
      * @param string $name Назва
      * @param mixed $var Змінна
-     * @return boolean Чи пуста змінна
+     * @throws Exception Помилка у разі якщо змінна пуста
      */
     public static function isEmpty(string $name, $var)
     {
-        if(empty($var)) {
+        $trimmed_var = trim($var);
+        if(empty($trimmed_var)) {
             throw new Exception($name . " is empty!");
         }
     }
