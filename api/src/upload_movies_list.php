@@ -5,6 +5,11 @@ if (!isset($_FILES["file"]) || $_FILES["file"]["error"] !== UPLOAD_ERR_OK) {
     throw new Exception("Помилка під час завантаження файлу.");
 }
 
+// Перевіряємо, чи формат файлу txt
+$file_name = $_FILES["file"]["name"];
+$allowed_extensions = ["txt"];
+Validator::checkFileExtension($file_name, $allowed_extensions);
+
 // "Відкриваємо" файл
 $uploadedFile = $_FILES["file"];
 $fileTmpName = $uploadedFile["tmp_name"];
